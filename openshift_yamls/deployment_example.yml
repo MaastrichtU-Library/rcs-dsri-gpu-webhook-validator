@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gpu-webhook-validator
+  labels:
+    app: gpu-webhook-validator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gpu-webhook-validator
+  template:
+    metadata:
+      labels:
+        app: gpu-webhook-validator
+    spec:
+      containers:
+        - resources:
+            limits:
+              cpu: '32'
+              memory: 200Gi
+            requests:
+              cpu: '2'
+              memory: 4Gi
+          name: gpu-webhook-validator
+          image: ghcr.io/maastrichtu-library/gpu-webhook-validator:1.0.1  
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8443 
+          env:
+            - name: ALLOWED_NAMESPACES
+              value: "namespace1,namespace2" 
+          volumeMounts:
+            - name: openshift-certificates
+              mountPath: /etc/certs  
+              readOnly: true
+      volumes:
+        - name: openshift-certificates
+          secret:
+            secretName: "gpu-webhook-validator-certs"  
