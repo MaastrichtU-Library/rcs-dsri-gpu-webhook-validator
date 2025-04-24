@@ -8,8 +8,8 @@ metadata:
     app: gpu-webhook-validator
 spec:
   ports:
-    - port: 443
-      targetPort: 443
+    - port: 8443
+      targetPort: 8443
       name: https
   selector:
     app: gpu-webhook-validator
