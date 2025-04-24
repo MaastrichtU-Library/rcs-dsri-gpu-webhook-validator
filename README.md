@@ -28,9 +28,11 @@ Apply the YAML file to the correct namespace.
 oc apply -f gpu_webhook_validator_service.yml -n <NAMESPACE>
 ```
 
-Next, we will need to fill in the ValidatingWebhokConfiguration_example.yml accordingly to create our own ValidatingWebhokConfiguration.yml file
-First, We need to have a specific route URL. So, in your namespace in OpenShift create a route and paste it in your file.
-Now, we need to retrieve the base64 format of the OpenShift CA bundle. Paste the output in your ValidatingWebhokConfiguration.yml file. 
+Next, we will need to fill in the 'ValidatingWebhokConfiguration_example.yml' accordingly to create our own ValidatingWebhokConfiguration.yml file
+
+First, We need to have a specific route URL. So, in your namespace in OpenShift create a route, note that you need to set TLS termination to 'reencrypt'! Paste it in your file. 
+
+Now, we need to retrieve the base64 format of the OpenShift CA bundle. Paste the output in your file. 
 
 ```
 oc get configmap -n <namespace> <configMap> -o jsonpath='{.data.service-ca\.crt}' | base64 -w0
