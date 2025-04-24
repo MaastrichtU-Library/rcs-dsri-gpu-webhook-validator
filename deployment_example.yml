@@ -23,7 +23,7 @@ spec:
               cpu: '2'
               memory: 4Gi
           name: gpu-webhook-validator
-          image: ghcr.io/MaastrichtU-Library/gpu-webhook-validator:1.0.0  
+          image: ghcr.io/maastrichtu-library/gpu-webhook-validator:1.0.0  
           ports:
             - containerPort: 443 
           env:
