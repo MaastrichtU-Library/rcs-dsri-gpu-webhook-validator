@@ -9,4 +9,4 @@ COPY gpu_webhook_validator.py /app
 
 EXPOSE 8443
 
-CMD ["gunicorn", "-b", "0.0.0.0:8443", "--certfile=/etc/certs/tls.crt", "--keyfile=/etc/certs/tls.key", "app:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:8443", "--certfile=/etc/certs/tls.crt", "--keyfile=/etc/certs/tls.key", "gpu_webhook_validator:app"]
