@@ -24,7 +24,7 @@ spec:
               memory: 4Gi
           name: gpu-webhook-validator
           image: ghcr.io/maastrichtu-library/gpu-webhook-validator:1.0.1  
-	  imagePullPolicy: IfNotPresent
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8443 
           env:
