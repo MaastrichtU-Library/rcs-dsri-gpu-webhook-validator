@@ -55,20 +55,3 @@ def deny(message):
             }
         }
     })
-
-def start_validator():
-    app.run(
-    host='0.0.0.0',
-    port=8443,
-    ssl_context=(
-        '/etc/certs/tls.crt',
-        '/etc/certs/tls.key'
-        )
-    )
-
-if __name__ == "__main__":
-    start_validator()
-
-
-
-
