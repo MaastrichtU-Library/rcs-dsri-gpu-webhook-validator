@@ -34,7 +34,7 @@ def validate():
         )
         
         if not gpu_toleration:
-            return deny(f"Namespace '{namespace}' can only be scheduled on the L40S GPU node. Please include the correct toleration to your deployment.")
+            return deny(f"Namespace '{namespace}' can only be scheduled on the L40S GPU node. Please include the correct toleration in your deployment.")
 
     return allow()
 
@@ -42,7 +42,7 @@ def allow():
     return jsonify({
         "response": {
             "allowed": True,
-            "status": {"message": "Your namespace is allowed to be scheduled on the L40S GPU node."}
+            "status": {"message": "GPU allocation validation succesfull, allowed to proceed."}
         }
     })
 
