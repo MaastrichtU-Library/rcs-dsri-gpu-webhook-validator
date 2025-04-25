@@ -40,7 +40,7 @@ oc get configmap -n <namespace> <configMap> -o jsonpath='{.data.service-ca\.crt}
 
 Deploy the Flask app in the namespace. Use the deployment_example.yml file as a template for your deployment.yml.
 
-Note that the list of allowed namespaces is an environment variable 'ALLOWED_NAMESPACES' which is passed via the 'deployment.yml' file. Pass these variables accordingly.
+Note that the list of allowed namespaces is an environment variable 'ALLOWED_NAMESPACES' which is passed via the 'deployment.yml' file. Pass this variable accordingly.
 
 ```
 oc apply -f deployment.yml -n <NAMESPACE>
