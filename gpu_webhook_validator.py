@@ -9,11 +9,14 @@ ALLOWED_NAMESPACES = os.getenv('ALLOWED_NAMESPACES').split(',')
 @app.route('/validate', methods=['POST'])
 def validate():
     request_info = request.get_json()
+    uid = request_info['request']['uid']
     namespace= request_info['request']['namespace']
     pod = request_info['request']['object']
     tolerations = pod.get('spec', {}).get('tolerations', [])
 
- 
+    allowed = True
+    reason = ""
+
     # Check if the namespace is in the list of allowed namespaces
     if namespace not in ALLOWED_NAMESPACES:
         # If namespace is not allowed, we prevent scheduling on the L40S GPU node)
@@ -24,7 +27,8 @@ def validate():
         )
         
         if gpu_toleration:
-            return deny(f"Namespace '{namespace}' is not allowed to be scheduled on the L40S GPU node.")
+            allowed = False
+            reason = (f"Namespace '{namespace}' is not allowed to be scheduled on the L40S GPU node.")
     else:
         # If the namespace is in the allowed list, we restrict it to L40S GPU only
         gpu_toleration = next(
@@ -34,24 +38,19 @@ def validate():
         )
         
         if not gpu_toleration:
-            return deny(f"Namespace '{namespace}' can only be scheduled on the L40S GPU node. Please include the correct toleration in your deployment.")
+            allowed = False
+            reason = (f"Namespace '{namespace}' can only be scheduled on the L40S GPU node. Please include the correct toleration in your deployment.")
 
-    return allow()
-
-def allow():
-    return jsonify({
+    admission_response = {
+        "apiVersion": "admission.k8s.io/v1",
+        "kind": "AdmissionReview",
         "response": {
-            "allowed": True,
-            "status": {"message": "GPU allocation validation succesfull, allowed to proceed."}
-        }
-    })
-
-def deny(message):
-    return jsonify({
-        "response": {
-            "allowed": False,
+            "uid": uid,  # Include the UID from the request to match it with the incoming request
+            "allowed": allowed,
             "status": {
-                "message": message
-            }
+                "reason": reason
+            } if not allowed else {}
         }
-    })
+    }
+
+    return jsonify(admission_response)
