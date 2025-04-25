@@ -2,19 +2,29 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: gpu-webhook-validator
+  annotations:
+    service.beta.openshift.io/inject-cabundle: "true"
 webhooks:
-  - name: <route>.apps.dsri2.unimaas.nl  # Use the route URL here
-    clientConfig:
+  - clientConfig:
       service:
-        name: gpu-webhook-validator-service
+        name: gpu-webhook-validator-service # This needs to be the name of the service in your namespace, linked to your pod
         namespace: <namespace>  # Make sure to match the namespace
         path: /validate
+        port: 443
       caBundle: <base64_encoded_ca_cert>  # oc get configmap -n <namespace> <configMap> -o jsonpath='{.data.service-ca\.crt}' | base64 -w0
-    rules:
-      - operations: ["CREATE", "UPDATE"]
-        apiGroups: [""]
-        apiVersions: ["v1"]
-        resources: ["pods"]
-        scope: "Namespaced"
-    admissionReviewVersions: ["v1"]
+    name: <namespace>.apps.dsri2.unimaas.nl
+    admissionReviewVersions: 
+    - v1 
+    - v1beta1
     sideEffects: None
+    failurePolicy: Ignore
+    rules:
+    - operations:
+      - CREATE 
+      - UPDATE
+      apiGroups: 
+      - ""
+      apiVersions: 
+      - "*"
+      resources: 
+      - "pods"
