@@ -12,7 +12,7 @@ webhooks:
         path: /validate
         port: 443
       caBundle: <base64_encoded_ca_cert>  # oc get configmap -n <namespace> <configMap> -o jsonpath='{.data.service-ca\.crt}' | base64 -w0
-    name: <namespace>.apps.dsri2.unimaas.nl
+    name: <route> # Fill in the route to the validating webhook service
     admissionReviewVersions: 
     - v1 
     - v1beta1
